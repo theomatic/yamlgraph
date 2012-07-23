@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'graphviz'
+require 'yaml'
+
+# TODO: Make these configurable from the command-line:
+INPUT_FILE_NAME = 'input.yml'
+OUTPUT_FILE_NAME = 'output.png'
+
+input = YAML.load_file INPUT_FILE_NAME
+
+if input.keys.size != 1
+  warn "More than one root element. Only using first."
+end
+
+g = GraphViz.new :G, type: :digraph
+root_name = input.keys[0]
+root = input[root_name]
+graph_root = g.add_nodes root_name
+root.keys.each do |child_name|
+  graph_child = g.add_nodes child_name
+  g.add_edges graph_root, graph_child
+end
+
+g.output png: OUTPUT_FILE_NAME
+system 'eog', OUTPUT_FILE_NAME or fail "Eye of Gnome (eog) not installed."
