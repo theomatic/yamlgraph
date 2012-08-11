@@ -19,6 +19,7 @@ class GraphViz
       graph_child = add_nodes child_name
       add_edges graph_root, graph_child
       add_branch graph_child, child if child.is_a? Hash
+      add_edges graph_child, child if child.is_a? String
     end
   end
 end
