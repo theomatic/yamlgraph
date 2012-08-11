@@ -1,7 +1,17 @@
 #!/usr/bin/env ruby
-
-require 'graphviz'
+# encoding: utf-8
 require 'yaml'
+begin
+  require 'graphviz'
+rescue LoadError => e
+  puts <<EOT
+#{e}
+————
+Oops. Requiring graphviz failed. Perhaps you should:
+  gem install ruby-graphviz
+EOT
+  exit 1
+end
 
 class GraphViz
   def add_branch graph_root, root
